@@ -18,17 +18,13 @@
     <button class="sidebar-toggle" id="sidebarClose"><i class="fas fa-times"></i></button>
   </div>
   <nav class="sidebar-nav">
-    <div class="nav-section"><span class="nav-label">TỔNG QUAN</span></div>
-    <a href="#" class="nav-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="#" class="nav-item"><i class="fas fa-chart-pie"></i><span>Cơ cấu doanh thu</span></a>
-    <a href="#" class="nav-item"><i class="fas fa-wallet"></i><span>Chi phí</span></a>
-    <div class="nav-section"><span class="nav-label">BÁO CÁO</span></div>
-    <a href="#" class="nav-item"><i class="fas fa-file-invoice-dollar"></i><span>Lợi nhuận</span></a>
-    <a href="#" class="nav-item"><i class="fas fa-boxes-stacked"></i><span>Giá vốn</span></a>
-    <a href="#" class="nav-item"><i class="fas fa-scale-balanced"></i><span>Điểm hòa vốn</span></a>
+    <div class="nav-section"><span class="nav-label">THỂ LOẠI BÁO CÁO</span></div>
+    <a href="#" class="nav-item active" data-tab="tab-overview"><i class="fas fa-tachometer-alt"></i><span>Tổng quan</span></a>
+    <a href="#" class="nav-item" data-tab="tab-revenue"><i class="fas fa-chart-pie"></i><span>Nguồn thu</span></a>
+    <a href="#" class="nav-item" data-tab="tab-expense"><i class="fas fa-wallet"></i><span>Nguồn chi</span></a>
+    <a href="#" class="nav-item" data-tab="tab-profit"><i class="fas fa-file-invoice-dollar"></i><span>Giá vốn & Lợi nhuận</span></a>
     <div class="nav-section"><span class="nav-label">HỆ THỐNG</span></div>
     <a href="#" class="nav-item"><i class="fas fa-plug"></i><span>MISA API</span><span class="badge badge-success">Live</span></a>
-    <a href="#" class="nav-item"><i class="fas fa-cog"></i><span>Cài đặt</span></a>
   </nav>
   <div class="sidebar-footer">
     <div class="sync-status"><span class="pulse-dot"></span><span>MISA Sync: Realtime</span></div>
@@ -37,7 +33,6 @@
 
 <!-- Main Content -->
 <main class="main-content" id="mainContent">
-  <!-- Header -->
   <header class="page-header">
     <div class="header-left">
       <button class="sidebar-toggle-open" id="sidebarOpen"><i class="fas fa-bars"></i></button>
@@ -58,52 +53,133 @@
     </div>
   </header>
 
-  <!-- KPI Cards -->
+  <!-- KPI Cards (Always visible) -->
   <section class="kpi-grid" id="kpiGrid"></section>
 
-  <!-- Charts Row 1 -->
-  <section class="charts-grid">
-    <div class="card chart-card">
-      <div class="card-header"><h3><i class="fas fa-chart-pie"></i> Cơ Cấu Nguồn Thu</h3></div>
-      <div class="card-body"><canvas id="revenueChart"></canvas></div>
-    </div>
-    <div class="card chart-card">
-      <div class="card-header"><h3><i class="fas fa-chart-bar"></i> Doanh Thu Theo Tuần</h3></div>
-      <div class="card-body"><canvas id="weeklyChart"></canvas></div>
-    </div>
-  </section>
+  <!-- Tabs Navigation -->
+  <div class="tabs-header" id="tabsNav">
+    <button class="tab-btn active" data-target="tab-overview"><i class="fas fa-eye"></i> Tổng Quan</button>
+    <button class="tab-btn" data-target="tab-revenue"><i class="fas fa-sack-dollar"></i> Nguồn Thu</button>
+    <button class="tab-btn" data-target="tab-expense"><i class="fas fa-money-bill-transfer"></i> Nguồn Chi</button>
+    <button class="tab-btn" data-target="tab-profit"><i class="fas fa-chart-line"></i> Giá Vốn & Lợi Nhuận</button>
+  </div>
 
-  <!-- Charts Row 2 -->
-  <section class="charts-grid">
-    <div class="card chart-card">
-      <div class="card-header"><h3><i class="fas fa-chart-donut"></i> Cơ Cấu Nguồn Chi</h3></div>
-      <div class="card-body"><canvas id="expenseChart"></canvas></div>
-    </div>
-    <div class="card chart-card">
-      <div class="card-header"><h3><i class="fas fa-chart-line"></i> Lợi Nhuận & Chi Phí Theo Tháng</h3></div>
-      <div class="card-body"><canvas id="profitTrendChart"></canvas></div>
-    </div>
-  </section>
+  <!-- TAB 1: OVERVIEW -->
+  <div id="tab-overview" class="tab-content active">
+    <!-- Pinned Charts -->
+    <section class="charts-grid" id="revenueSection">
+      <div class="card chart-card">
+        <div class="card-header"><h3><i class="fas fa-chart-pie"></i> Cơ Cấu Nguồn Thu (Ghim)</h3></div>
+        <div class="card-body"><canvas id="revenueChartOverview"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="card-header"><h3><i class="fas fa-chart-pie"></i> Cơ Cấu Nguồn Chi (Ghim)</h3></div>
+        <div class="card-body"><canvas id="expenseChartOverview"></canvas></div>
+      </div>
+    </section>
+    
+    <section class="charts-grid-full">
+      <div class="card chart-card">
+        <div class="card-header"><h3><i class="fas fa-chart-line"></i> Xu Hướng Doanh Thu – Chi Phí – Lợi Nhuận Theo Tháng</h3></div>
+        <div class="card-body" style="height:360px"><canvas id="profitTrendChart"></canvas></div>
+      </div>
+    </section>
 
-  <!-- Detail Tables -->
-  <section class="tables-grid">
-    <div class="card table-card">
-      <div class="card-header"><h3><i class="fas fa-list"></i> Chi Tiết Doanh Thu</h3><span class="badge badge-primary">Realtime</span></div>
-      <div class="card-body"><div class="table-wrap"><table class="data-table" id="revenueTable"></table></div></div>
-    </div>
-    <div class="card table-card">
-      <div class="card-header"><h3><i class="fas fa-coins"></i> Chi Tiết Chi Phí</h3><span class="badge badge-warning">Monthly</span></div>
-      <div class="card-body"><div class="table-wrap"><table class="data-table" id="expenseTable"></table></div></div>
-    </div>
-  </section>
+    <!-- Key metrics -->
+    <section class="kpi-bottom">
+      <div class="card">
+        <div class="card-header"><h3><i class="fas fa-calculator"></i> Chỉ Số Quan Trọng</h3></div>
+        <div class="card-body" id="metricsGrid"></div>
+      </div>
+    </section>
+  </div>
 
-  <!-- KPI Bottom -->
-  <section class="kpi-bottom">
-    <div class="card">
-      <div class="card-header"><h3><i class="fas fa-calculator"></i> Chỉ Số Quan Trọng</h3></div>
-      <div class="card-body" id="metricsGrid"></div>
-    </div>
-  </section>
+  <!-- TAB 2: REVENUE -->
+  <div id="tab-revenue" class="tab-content">
+    <section class="split-grid">
+      <!-- Chart Left -->
+      <div class="card chart-card">
+        <div class="card-header"><h3><i class="fas fa-chart-pie"></i> Cơ Cấu Nguồn Thu</h3></div>
+        <div class="card-body" style="height:300px"><canvas id="revenueChartTab"></canvas></div>
+      </div>
+      <!-- Table Right -->
+      <div class="card table-card">
+        <div class="card-header"><h3><i class="fas fa-list"></i> Bảng Chi Tiết Doanh Thu</h3></div>
+        <div class="card-body" style="height:300px;overflow-y:auto"><div class="table-wrap"><table class="data-table" id="revenueTable"></table></div></div>
+      </div>
+    </section>
+
+    <section class="tables-grid-full">
+      <div class="card table-card">
+        <div class="card-header"><h3><i class="fas fa-table"></i> Chi Tiết Doanh Thu Theo Tuần</h3><span class="badge badge-primary">Realtime</span></div>
+        <div class="card-body"><div class="table-wrap"><table class="data-table" id="revenueWeeklyTable"></table></div></div>
+      </div>
+    </section>
+
+    <section class="tables-grid-full">
+      <div class="card table-card">
+        <div class="card-header"><h3><i class="fas fa-scale-balanced"></i> Đối Chiếu Doanh Thu</h3><span class="badge badge-info" style="background:rgba(59,130,246,.1);color:#3b82f6">Giải trình</span></div>
+        <div class="card-body"><div class="table-wrap"><table class="data-table" id="reconcileTable"></table></div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 3: EXPENSES -->
+  <div id="tab-expense" class="tab-content">
+    <section class="split-grid">
+      <!-- Chart Left -->
+      <div class="card chart-card">
+        <div class="card-header"><h3><i class="fas fa-chart-pie"></i> Cơ Cấu Nguồn Chi</h3></div>
+        <div class="card-body" style="height:350px"><canvas id="expenseChartTab"></canvas></div>
+      </div>
+      <!-- Table Right -->
+      <div style="display:flex;flex-direction:column;gap:1.25rem;">
+        <div class="card table-card">
+          <div class="card-header"><h3><i class="fas fa-coins"></i> Chi Phí Thường Xuyên (Cố Định)</h3></div>
+          <div class="card-body" style="padding:0.75rem 1rem"><div class="table-wrap"><table class="data-table" id="fixedExpTable"></table></div></div>
+        </div>
+        <div class="card table-card">
+          <div class="card-header"><h3><i class="fas fa-truck"></i> Chi Phí Vận Hành (Có Drill-down)</h3></div>
+          <div class="card-body" style="padding:0.75rem 1rem"><div class="table-wrap"><table class="data-table" id="opExpTable"></table></div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 4: COGS & PROFIT -->
+  <div id="tab-profit" class="tab-content">
+    <section class="split-grid">
+      <!-- COGS Chart Left -->
+      <div class="card chart-card">
+        <div class="card-header"><h3><i class="fas fa-boxes-stacked"></i> Cơ Cấu Giá Vốn (GVHB)</h3><span class="badge badge-danger" style="background:rgba(239,68,68,.1);color:#ef4444">~87.8% DT</span></div>
+        <div class="card-body" style="height:320px"><canvas id="cogsChart"></canvas></div>
+      </div>
+      <!-- COGS/Margin Tables Right -->
+      <div style="display:flex;flex-direction:column;gap:1.25rem;">
+        <div class="card table-card">
+          <div class="card-header"><h3><i class="fas fa-boxes-stacked"></i> Chi Tiết Giá Vốn</h3></div>
+          <div class="card-body" style="padding:0.75rem 1rem"><div class="table-wrap"><table class="data-table" id="cogsTable"></table></div></div>
+        </div>
+        <div class="card table-card">
+          <div class="card-header"><h3><i class="fas fa-chart-bar"></i> Biên Lợi Nhuận Gộp</h3></div>
+          <div class="card-body" style="padding:0.75rem 1rem"><div class="table-wrap"><table class="data-table" id="marginTable"></table></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="split-grid">
+      <!-- Profit Waterfall Chart Left -->
+      <div class="card chart-card" style="grid-column: 1 / 2">
+        <div class="card-header"><h3><i class="fas fa-layer-group"></i> Cơ Cấu Thặng Dư / Lợi Nhuận</h3></div>
+        <div class="card-body" style="height:380px"><canvas id="profitStructChart"></canvas></div>
+      </div>
+      <!-- Profit Structure Table Right -->
+      <div class="card table-card" style="grid-column: 2 / 3">
+        <div class="card-header"><h3><i class="fas fa-coins"></i> Bảng Cơ Cấu Thặng Dư Chi Tiết</h3></div>
+        <div class="card-body"><div class="table-wrap"><table class="data-table" id="profitTable"></table></div></div>
+      </div>
+    </section>
+  </div>
 </main>
 
 <script src="dashboard-api.js"></script>
